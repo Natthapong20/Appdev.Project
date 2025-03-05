@@ -1,0 +1,99 @@
+lab_6_6630300131
+
+select e.name as 'employee name',d.name as 'department',e.salary,round(e.salary-(e.salary*5/100
+)-750) as 'Net salary'from employee e,department d where e.department_id = d.department_id;
++---------------+--------------------------+--------+------------+
+| employee name | department               | salary | Net salary |
++---------------+--------------------------+--------+------------+
+| somchai       | research and development |  15000 |      13500 |
+| wichit        | finance                  |  13500 |      12075 |
+| somjai        | research and development |  16500 |      14925 |
+| aphitsit      | marketing                |  12000 |      10650 |
+| yongyut       | research and development |  18000 |      16350 |
+| somjit        | research and development |  16500 |      14925 |
++---------------+--------------------------+--------+------------+
+
+2. select e.name,e.job as 'Position',d.name as 'Department',e.salary,s.skill from employee e, department d, employee_skill s where d.department_id = e.department_id and e.employee_id = s.employee_id and e.salary >= 20000;
++---------+------------+--------------------------+--------+-------+
+| name    | Position   | Department               | salary | skill |
++---------+------------+--------------------------+--------+-------+
+| yongyut | programmer | research and development |  20000 | php   |
++---------+------------+--------------------------+--------+-------+
+
+3.select e.employee_id as 'EmployeeId',e.name as 'Employee Name',e.salary,d.name as 'Department' from employee e,department d,employee_skill s where (s.skill='java' xor d.name='marketing') and e.employee_id=s.employee_id and e.department_id=d.department_id union select e.employee_id as 'EmployeeId',e.name as 'Employee Name',e.salary,d.name as 'Department' from employee e,department d,employee_skill s where (s.skill='java' xor d.name='marketing') and e.employee_id=s.employee_id and e.department_id=d.department_id;
++------------+---------------+--------+--------------------------+
+| EmployeeId | Employee Name | salary | Department               |
++------------+---------------+--------+--------------------------+
+|       1111 | somchai       |  15000 | research and development |
+|       3333 | somjai        |  16500 | research and development |
+|       4444 | aphitsit      |  12000 | marketing                |
++------------+---------------+--------+--------------------------+
+
+4.select concat(e.employee_id,' - ',upper(e.name)) as 'ID - Name',replace (d.name,'research and development','R & D') as 'Department' from employee e ,department d where e.department_id=d.department_id;
++-----------------+------------+
+| ID - Name       | Department |
++-----------------+------------+
+| 1111 - SOMCHAI  | R & D      |
+| 2222 - WICHIT   | finance    |
+| 3333 - SOMJAI   | R & D      |
+| 4444 - APHITSIT | marketing  |
+| 4445 - YONGYUT  | R & D      |
+| 4446 - SOMJIT   | R & D      |
++-----------------+------------+
+
+5.select c.name as 'Client Name',length(c.name) as 'Length(Client Name)',e.name as'Employee' ,concat(substring(a.work_date,9,2),'-',substring(a.work_date,6,2),'-',substring(a.work_date,1,4)) as'Work date' from employee e , client c , assignment a where c.client_id=a.client_id and a.employee_id=e.employee_id;
++---------------------+---------------------+----------+------------+
+| Client Name         | Length(Client Name) | Employee | Work date  |
++---------------------+---------------------+----------+------------+
+| abc company limited |                  19 | somchai  | 27-04-2009 |
+| imperial industry   |                  17 | wichit   | 26-05-2009 |
++---------------------+---------------------+----------+------------+
+
+6.select employee_id , substring(name,4,4) as 'Nick Name' , replace(job,'programmer','p') as 'Job'
+ from employee where name like '%som%';
++-------------+-----------+------+
+| employee_id | Nick Name | Job  |
++-------------+-----------+------+
+|        1111 | chai      | p    |
+|        3333 | jai       | p    |
+|        4446 | jit       | p    |
++-------------+-----------+------+
+
+7.select replace(job,'DBA','Database Administrator') as 'Job',sum(salary) as 'Sum', round(avg(salary)) as 'Average',min(salary) as Min,max(salary) as 'Max' from employee group by job order by job;
++------------------------+-------+---------+-------+-------+
+| Job                    | Sum   | Average | Min   | Max   |
++------------------------+-------+---------+-------+-------+
+| Database Administrator | 13500 |   13500 | 13500 | 13500 |
+| programmer             | 68000 |   17000 | 15000 | 20000 |
+| system administrator   | 12000 |   12000 | 12000 | 12000 |
++------------------------+-------+---------+-------+-------+
+
+8.select e.name as 'Name',count(s.skill) as 'Number of Skills' from employee e ,employee_skill s where e.employee_id=s.employee_id group by e.name having count(s.skill)>=2;
++----------+------------------+
+| Name     | Number of Skills |
++----------+------------------+
+| somchai  |                3 |
+| somjai   |                2 |
+| aphitsit |                2 |
++----------+------------------+
+
+9.select name , salary ,(select round(avg(salary)) from employee) as 'average salary from all employees', salary - (select round(avg(salary)) from employee) as 'Salary-Average' from employee where (salary -(select round(avg(alary)) from employee)) > 0;
++---------+--------+-----------------------------------+----------------+
+| name    | salary | average salary from all employees | Salary-Average |
++---------+--------+-----------------------------------+----------------+
+| somjai  |  16500 |                             15583 |            917 |
+| yongyut |  20000 |                             15583 |           4417 |
+| somjit  |  16500 |                             15583 |            917 |
++---------+--------+-----------------------------------+----------------+
+
+10.select e.name as 'Employee Name', e.Salary as 'Employee Salary', (select round(avg(salary))from employee where department_ID = e.Department_ID group by department_ID) as 'Average Salary fpr each Department' from employee e;
++---------------+-----------------+------------------------------------+
+| Employee Name | Employee Salary | Average Salary fpr each Department |
++---------------+-----------------+------------------------------------+
+| somchai       |           15000 |                              17000 |
+| wichit        |           13500 |                              13500 |
+| somjai        |           16500 |                              17000 |
+| aphitsit      |           12000 |                              12000 |
+| yongut        |           20000 |                              17000 |
+| somjit        |           16500 |                              17000 |
++---------------+-----------------+------------------------------------+
