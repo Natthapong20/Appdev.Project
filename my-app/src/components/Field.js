@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import PlayerCard from "./PlayerCard";
 
 const formations = {
@@ -26,6 +27,14 @@ const formations = {
 
 const Field = () => {
   const [formation, setFormation] = useState("4-3-3");
+  const [players, setPlayers] = useState([]);
+
+  // โหลดข้อมูลนักเตะจาก Backend
+  useEffect(() => {
+    axios.get("http://localhost:5000/players")
+      .then((res) => setPlayers(res.data))
+      .catch((err) => console.error("Error fetching players:", err));
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-900 text-white">
@@ -41,9 +50,11 @@ const Field = () => {
         <div className="relative bg-green-600 w-[600px] h-[800px] p-6 rounded-lg flex flex-col items-center justify-evenly">
           {formations[formation].map((row, rowIndex) => (
             <div key={rowIndex} className="flex justify-center gap-2">
-              {row.map((position, index) => (
-                <PlayerCard key={index} position={position} />
-              ))}
+              {row.map((position, index) => {
+                // หา Player ที่มีตำแหน่งตรงกัน
+                const player = players.find((p) => p.position === position);
+                return <PlayerCard key={index} position={position} player={player} />;
+              })}
             </div>
           ))}
         </div>
@@ -57,9 +68,7 @@ const Field = () => {
         {Object.keys(formations).map((plan) => (
           <button
             key={plan}
-            className={`p-2 rounded bg-yellow-500 ${
-              formation === plan ? "ring-4 ring-yellow-300" : ""
-            }`}
+            className={`p-2 rounded bg-yellow-500 ${formation === plan ? "ring-4 ring-yellow-300" : ""}`}
             onClick={() => setFormation(plan)}
           >
             {plan}
