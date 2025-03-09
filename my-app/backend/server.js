@@ -3,19 +3,23 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+// นำเข้า Auth Routes
+const authRoutes = require("./routes/authRoutes");
+
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-// เชื่อมต่อ MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+// ✅ เชื่อมต่อ MongoDB
+mongoose.connect(process.env.MONGO_URI)
+
 .then(() => console.log("✅ MongoDB Connected"))
 .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
-// สร้าง Schema สำหรับเก็บข้อมูลนักเตะ
+// ✅ ใช้ API Routes สำหรับ Authentication
+app.use("/auth", authRoutes);
+
+// ✅ สร้าง Schema สำหรับเก็บข้อมูลนักเตะ
 const PlayerSchema = new mongoose.Schema({
   name: String,
   position: String,
@@ -49,6 +53,6 @@ app.put("/players/:id", async (req, res) => {
   res.json({ message: "✅ Player updated!" });
 });
 
-// เปิดเซิร์ฟเวอร์
+// ✅ เปิดเซิร์ฟเวอร์
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
