@@ -8,7 +8,7 @@ const Market = () => {
   };
 
   return (
-    <div className="flex flex-col justify-start items-center h-screen p-6 text-white">
+    <div className="d-flex justify-content-center align-items-center vh-100" style={{backgroundColor:'#9747FF'}}>
       <div className="text-center mt-12">
         <h1 className="text-2xl font-bold">🛒 World Market</h1>
         <p>เลือกซื้อนักเตะที่คุณสนใจของคุณที่นี่!</p>
@@ -25,15 +25,15 @@ const Market = () => {
         {/* รูปภาพนักเตะ */}
         <div className="mt-6 flex justify-center gap-4">
           <img 
-            src="/players/Mainoo_MF.png" 
+            src="/players/2.png" 
             alt="Mainoo MF" 
-            className="w-48 h-auto rounded-lg shadow-lg cursor-pointer"
+            className="w-48 h-auto rounded-lg  cursor-pointer"
             onClick={handleImageClick}
           />
           <img 
-            src="/players/Maguire_DF.png" 
+            src="/players/3.png" 
             alt="Maguire DF" 
-            className="w-48 h-auto rounded-lg shadow-lg cursor-pointer"
+            className="w-48 h-auto rounded-lg  cursor-pointer"
             onClick={handleImageClick}
           />
         </div>
