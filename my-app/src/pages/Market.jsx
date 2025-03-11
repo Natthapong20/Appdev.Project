@@ -1,47 +1,73 @@
 import { useState } from "react";
 
-const Market = () => {
-  const [message, setMessage] = useState("");
+const players = [
+  { id: 1, img: "/players/Mainoo_MF.png" },
+  { id: 2, img: "/players/Maguire_DF.png" },
+  { id: 3, img: "/players/Garnacho_FW.png" },
+  { id: 4, img: "/players/Raya_GK.png" }
+];
 
-  const handleImageClick = () => {
-    setMessage("Hello");
+const Market = () => {
+  const [selectedPosition, setSelectedPosition] = useState("");
+
+  const handleFilterClick = (position) => {
+    setSelectedPosition(position);
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100" style={{backgroundColor:'#9747FF'}}>
-      <div className="text-center mt-12">
+    <div className="flex flex-col items-center min-h-screen bg-purple-500 pt-12">
+      {/* ข้อมูลตลาดนักเตะ */}
+      <div className="text-center">
         <h1 className="text-2xl font-bold">🛒 World Market</h1>
-        <p>เลือกซื้อนักเตะที่คุณสนใจของคุณที่นี่!</p>
+        <p>เลือกซื้อนักเตะที่คุณสนใจที่นี่!</p>
         <p>ถ้าต้องการกรองเชิญทางนี้</p>
+      </div>
 
-        {/* ปุ่มกรองตำแหน่งนักเตะ */}
-        <div className="mt-4 flex justify-center gap-4">
-          <button className="px-7 py-3 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded">FW</button>
-          <button className="px-7 py-3 bg-green-500 hover:bg-green-700 text-white font-bold rounded">MF</button>
-          <button className="px-7 py-3 bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded">DF</button>
-          <button className="px-7 py-3 bg-red-500 hover:bg-red-700 text-white font-bold rounded">GK</button>
-        </div>
+      {/* ปุ่มกรองตำแหน่งนักเตะ */}
+      <div className="mt-4 flex justify-center gap-4">
+        <button
+          className={`px-7 py-3 font-bold rounded ${
+            selectedPosition === "" ? "bg-gray-700 text-white" : "bg-white hover:bg-gray-300"
+          }`}
+          onClick={() => handleFilterClick("")}
+        >
+          All
+        </button>
+        {["FW", "MF", "DF", "GK"].map((pos) => (
+          <button
+            key={pos}
+            className={`px-7 py-3 font-bold rounded ${
+              selectedPosition === pos ? "bg-gray-700 text-white" : {
+                FW: "bg-blue-500 hover:bg-red-700",
+                MF: "bg-green-500 hover:bg-green-700",
+                DF: "bg-yellow-500 hover:bg-blue-700",
+                GK: "bg-red-500 hover:bg-yellow-700",
+              }[pos]
+            }`}
+            onClick={() => handleFilterClick(pos)}
+          >
+            {pos}
+          </button>
+        ))}
+      </div>
 
-        {/* รูปภาพนักเตะ */}
-        <div className="mt-6 flex justify-center gap-4">
-          <img 
-            src="/players/2.png" 
-            alt="Mainoo MF" 
-            className="w-48 h-auto rounded-lg  cursor-pointer"
-            onClick={handleImageClick}
-          />
-          <img 
-            src="/players/3.png" 
-            alt="Maguire DF" 
-            className="w-48 h-auto rounded-lg  cursor-pointer"
-            onClick={handleImageClick}
-          />
-        </div>
-
-        {/* แสดงข้อความ Hello */}
-        {message && <div className="mt-4 text-xl font-bold text-green-500">{message}</div>}
+      {/* รูปภาพนักเตะที่ถูกกรอง */}
+      <div className="mt-6 flex justify-center gap-4">
+        {players
+          .filter((player) =>
+            !selectedPosition || player.img.includes(`_${selectedPosition}.png`)
+          )
+          .map((player) => (
+            <img
+              key={player.id}
+              src={player.img}
+              alt={player.img.split("/").pop().replace(".png", "")}
+              className="w-48 h-auto rounded-lg cursor-pointer"
+            />
+          ))}
       </div>
     </div>
+    
   );
 };
 
