@@ -23,11 +23,18 @@ const Market = () => {
   };
 
   const handlePlayerClick = (player) => {
-    if (!purchasedPlayers.some((p) => p.id === player.id)) {
-      setPurchasedPlayers([...purchasedPlayers, player]);
-      alert(`✅ คุณซื้อ ${player.name} เรียบร้อยแล้ว!\n⚽ ยิงประตู: ${player.goals} | 🎯 ลงเล่น: ${player.appearances} นัด`);
-    } else {
+    if (purchasedPlayers.some((p) => p.id === player.id)) {
       alert(`⚠️ คุณมี ${player.name} อยู่แล้ว!`);
+      return;
+    }
+
+    const confirmPurchase = window.confirm(
+      `คุณต้องการซื้อนักเตะ ${player.name} ใช่หรือไม่?\n⚽ ยิงประตู: ${player.goals} | 🎯 ลงเล่น: ${player.appearances} นัด`
+    );
+
+    if (confirmPurchase) {
+      setPurchasedPlayers([...purchasedPlayers, player]);
+      alert(`✅ คุณซื้อ ${player.name} เรียบร้อยแล้ว!`);
     }
   };
 
@@ -38,25 +45,14 @@ const Market = () => {
         <p>เลือกซื้อนักเตะที่คุณสนใจที่นี่!</p>
       </div>
 
-      {/* ปุ่มกรองตำแหน่ง */}
       <div className="mt-4 flex justify-center gap-4">
-        <button
-          className={`px-7 py-3 font-bold rounded ${selectedPosition === "" ? "bg-gray-700 text-white" : "bg-white hover:bg-gray-300"}`}
-          onClick={() => handleFilterClick("")}
-        >
+        <button className={`px-7 py-3 font-bold rounded ${selectedPosition === "" ? "bg-gray-700 text-white" : "bg-white hover:bg-gray-300"}`} onClick={() => handleFilterClick("")}>
           All
         </button>
         {["FW", "MF", "DF", "GK"].map((pos) => (
           <button
             key={pos}
-            className={`px-7 py-3 font-bold rounded ${
-              selectedPosition === pos ? "bg-gray-700 text-white" : {
-                FW: "bg-blue-500 hover:bg-red-700",
-                MF: "bg-green-500 hover:bg-green-700",
-                DF: "bg-yellow-500 hover:bg-blue-700",
-                GK: "bg-red-500 hover:bg-yellow-700",
-              }[pos]
-            }`}
+            className={`px-7 py-3 font-bold rounded ${selectedPosition === pos ? "bg-gray-700 text-white" : "bg-white hover:bg-gray-300"}`}
             onClick={() => handleFilterClick(pos)}
           >
             {pos}
@@ -64,22 +60,18 @@ const Market = () => {
         ))}
       </div>
 
-      {/* แสดงนักเตะที่เลือกตามการกรอง */}
       <div className="mt-6 flex justify-center gap-4 flex-wrap">
-        {players
-          .filter((player) => !selectedPosition || player.position === selectedPosition)
-          .map((player) => (
-            <img
-              key={player.id}
-              src={player.img}
-              alt={player.name}
-              className="w-48 h-auto rounded-lg cursor-pointer"
-              onClick={() => handlePlayerClick(player)}
-            />
-          ))}
+        {players.filter((player) => !selectedPosition || player.position === selectedPosition).map((player) => (
+          <img
+            key={player.id}
+            src={player.img}
+            alt={player.name}
+            className="w-48 h-auto rounded-lg cursor-pointer hover:opacity-80"
+            onClick={() => handlePlayerClick(player)}
+          />
+        ))}
       </div>
 
-      {/* แสดงรายชื่อนักเตะที่ซื้อแล้ว */}
       <div className="mt-8 w-3/4 bg-white p-4 rounded-lg shadow-lg">
         <h2 className="text-xl font-bold">🛍️ นักเตะที่คุณซื้อแล้ว</h2>
         {purchasedPlayers.length === 0 ? (
