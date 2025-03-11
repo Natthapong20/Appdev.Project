@@ -1,10 +1,10 @@
 import { useState } from "react";
 
 const players = [
-  { id: 1, img: "/players/Mainoo_MF.png" },
-  { id: 2, img: "/players/Maguire_DF.png" },
-  { id: 3, img: "/players/Garnacho_FW.png" },
-  { id: 4, img: "/players/Raya_GK.png" }
+  { id: 1, img: "/players/Mainoo_MF.png", name: "Kobbie Mainoo", age: 18, club: "Manchester United", position: "MF" },
+  { id: 2, img: "/players/Maguire_DF.png", name: "Harry Maguire", age: 30, club: "Manchester United", position: "DF" },
+  { id: 3, img: "/players/Garnacho_FW.png", name: "Alejandro Garnacho", age: 19, club: "Manchester United", position: "FW" },
+  { id: 4, img: "/players/Raya_GK.png", name: "David Raya", age: 28, club: "Arsenal", position: "GK" }
 ];
 
 const Market = () => {
@@ -12,6 +12,10 @@ const Market = () => {
 
   const handleFilterClick = (position) => {
     setSelectedPosition(position);
+  };
+
+  const handlePlayerClick = (player) => {
+    alert(`คุณเลือก ${player.name}\nอายุ: ${player.age}\nสโมสร: ${player.club}\nตำแหน่ง: ${player.position}`);
   };
 
   return (
@@ -55,19 +59,19 @@ const Market = () => {
       <div className="mt-6 flex justify-center gap-4">
         {players
           .filter((player) =>
-            !selectedPosition || player.img.includes(`_${selectedPosition}.png`)
+            !selectedPosition || player.position === selectedPosition
           )
           .map((player) => (
             <img
               key={player.id}
               src={player.img}
-              alt={player.img.split("/").pop().replace(".png", "")}
+              alt={player.name}
               className="w-48 h-auto rounded-lg cursor-pointer"
+              onClick={() => handlePlayerClick(player)}
             />
           ))}
       </div>
     </div>
-    
   );
 };
 
