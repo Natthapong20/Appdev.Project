@@ -88,16 +88,34 @@ import { Link } from "react-router-dom";
 import "./MyClub.css"; // นำเข้าไฟล์ CSS
 
 const players = [
+<<<<<<< HEAD
   { id: 1, img: "/players/Mainoo_MF.png" },
   { id: 2, img: "/players/Maguire_DF.png" },
   { id: 3, img: "/players/Garnacho_FW.png" },
   { id: 4, img: "/players/Raya_GK.png" }
  
+=======
+  { id: 1, img: "/players/Mainoo_MF.png", name: "Kobbie Mainoo", age: 18, club: "Manchester United", position: "MF" },
+  { id: 2, img: "/players/Maguire_DF.png", name: "Harry Maguire", age: 30, club: "Manchester United", position: "DF" },
+  { id: 3, img: "/players/Garnacho_FW.png", name: "Alejandro Garnacho", age: 19, club: "Manchester United", position: "FW" },
+  { id: 4, img: "/players/Raya_GK.png", name: "David Raya", age: 28, club: "Arsenal", position: "GK" }
+>>>>>>> 93e2d674b47232cbe31b2da2436d54b882530172
 ];
 
 const Market = () => {
   const [selectedPosition, setSelectedPosition] = useState("");
 
+<<<<<<< HEAD
+=======
+  const handleFilterClick = (position) => {
+    setSelectedPosition(position);
+  };
+
+  const handlePlayerClick = (player) => {
+    alert(`คุณเลือก ${player.name}\nอายุ: ${player.age}\nสโมสร: ${player.club}\nตำแหน่ง: ${player.position}`);
+  };
+
+>>>>>>> 93e2d674b47232cbe31b2da2436d54b882530172
   return (
     <div className="flex min-h-screen">
       {/* ✅ Sidebar อยู่ฝั่งซ้ายและคงที่ */}
@@ -112,6 +130,7 @@ const Market = () => {
         <h1 className="text-2xl font-bold text-center">🛒 World Market</h1>
         <p className="text-center">เลือกซื้อนักเตะที่คุณสนใจที่นี่!</p>
 
+<<<<<<< HEAD
         {/* ปุ่มกรองตำแหน่งนักเตะ */}
         <div className="mt-4 flex justify-center gap-4">
           {["All", "FW", "MF", "DF", "GK"].map((pos) => (
@@ -132,6 +151,22 @@ const Market = () => {
             >
               {pos}
             </button>
+=======
+      {/* รูปภาพนักเตะที่ถูกกรอง */}
+      <div className="mt-6 flex justify-center gap-4">
+        {players
+          .filter((player) =>
+            !selectedPosition || player.position === selectedPosition
+          )
+          .map((player) => (
+            <img
+              key={player.id}
+              src={player.img}
+              alt={player.name}
+              className="w-48 h-auto rounded-lg cursor-pointer"
+              onClick={() => handlePlayerClick(player)}
+            />
+>>>>>>> 93e2d674b47232cbe31b2da2436d54b882530172
           ))}
         </div>
 
