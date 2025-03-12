@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Welcome from "./pages/Welcome";
 import MyClub from "./pages/Myclub";
+import Createpy from "./pages/Createpy";
 import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/' element={<Welcome />} />
             <Route path='/Myclub' element={< MyClub/>} />
-            
+            <Route path='/Create' element={< Createpy/>} />
           </Routes>
     </Router>
   );
