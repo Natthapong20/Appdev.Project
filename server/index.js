@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors"); 
+const cors = require("cors");
 const EmployeeModel = require("./models/Employee");
 const playerl = require("./models/Player");
 
@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// เชื่อมต่อ MongoDB
+// เชื่อม mongo ค้าบ
 mongoose.connect("mongodb+srv://test:1234@appdev.atzq8.mongodb.net/?retryWrites=true&w=majority&appName=Appdev", {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -16,6 +16,7 @@ mongoose.connect("mongodb+srv://test:1234@appdev.atzq8.mongodb.net/?retryWrites=
 .then(() => console.log("✅ MongoDB Connected"))
 .catch(err => console.log("❌ MongoDB Connection Error:", err));
 
+// สร้างการล็อคอิน
 app.post("/login", (req, res) => {
     const { email, password } = req.body;
     EmployeeModel.findOne({ email: email })
@@ -24,7 +25,7 @@ app.post("/login", (req, res) => {
             if(user.password === password) {
                 res.json("Success");
             } else {
-                res.json("the password is incorrect");
+                res.json("The password is incorrect");
             }
         } else {
             res.json("No record existed");
@@ -32,17 +33,17 @@ app.post("/login", (req, res) => {
     });
 });
 
+// ตรงนนี้ล็อคอินค้าบ
 app.post('/register', async (req, res) => {
-
     try {
         const newEmployee = await EmployeeModel.create(req.body);
-        res.json({ message: "User registered successfully!", user: newEmployee });
+        res.json({ message: "User  registered successfully!", user: newEmployee });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-//ทำถึงแค่นี้ แค่ create ได้ 
+// สร้างนักเดะ 
 app.post("/create", async (req, res) => {
     try {
         const newPlayer = new playerl(req.body); 
@@ -54,37 +55,43 @@ app.post("/create", async (req, res) => {
     }
 });
 
-//ยังไม่ได้ทำ
+// REad 
 app.get("/create", async (req, res) => {
     try {
-        const players = await playerl.find(); // ✅ ใช้ playerl
-        res.json({ players }); // ✅ ส่งออกเป็น object { players: [...] }
+        const players = await playerl.find();
+        res.json({ players });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-//ยังไม่ได้ทำ
+// เรียกการ update
 app.put("/create/:id", async (req, res) => {
     try {
-        const updatedPlayer = await Player.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updatedPlayer = await playerl.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedPlayer) {
+            return res.status(404).json({ message: "Player not found" });
+        }
         res.json(updatedPlayer);
     } catch (error) {
         res.status(500).json({ error: "Error updating player" });
     }
 });
 
-//ยังไม่ได้ทำ
+// เรียกให้มีการ delete 
 app.delete("/create/:id", async (req, res) => {
     try {
-        await Player.findByIdAndDelete(req.params.id);
+        const deletedPlayer = await playerl.findByIdAndDelete(req.params.id);
+        if (!deletedPlayer) {
+            return res.status(404).json({ message: "Player not found" });
+        }
         res.json({ message: "Player deleted" });
     } catch (error) {
         res.status(500).json({ error: "Error deleting player" });
     }
 });
 
-// เปิดเซิร์ฟเวอร์
+
 app.listen(3001, () => {
     console.log("🚀 Server is running on port 3001");
 });
