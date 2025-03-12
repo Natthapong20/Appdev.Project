@@ -1,81 +1,100 @@
-// import React, { useState } from "react";
-// import { Link, useNavigate } from "react-router-dom";
-// import axios from "axios";
-
-// function Login() {
-//     const [email, setEmail] = useState("");
-//     const [password, setPassword] = useState("");
-//     const navigate = useNavigate();
-
-//     return (
-//         <div className="d-flex flex-column justify-content-center align-items-center vh-100" style={{backgroundColor:'#060143'}}>
-            
-//             <Link to="/marketplace" className="btn btn-primary w-100 rounded-0 mb-3">
-//                 Market
-//             </Link>
-
-//             <Link to="/compare" className="btn btn-secondary w-100 rounded-0 mb-3">
-//                 Compare
-//             </Link>
-
-//             <Link to="/compare" className="btn btn-secondary w-100 rounded-0">
-//                 Field
-//             </Link>
-            
-//         </div>
-//     );
-// }
-
-// export default Login;
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "./MyClub.css"; // นำเข้าไฟล์ CSS สำหรับสไตล์
+import { useNavigate } from "react-router-dom";
+import "./MyClub.css";
 
 const formations = {
     "4-3-3": [
-        [9, 10, 11],
-        [6, 7, 8], 
-        [2, 3, 4, 5],
-        [1], 
+        ["LW", "ST", "RW"],  
+        ["LCM", "CM", "RCM"], 
+        ["LB", "CB", "CB", "RB"], 
+        ["GK"], 
     ],
     "4-4-2": [
-        [10, 11],
-        [6, 7, 8, 9],
-        [2, 3, 4, 5],
-        [1],
+        ["ST", "ST"],
+        ["LM", "LCM", "RCM", "RM"],
+        ["LB", "CB", "CB", "RB"],
+        ["GK"],
     ],
     "4-3-2-1": [
-        [11],
-        [9, 10],
-        [6, 7, 8],
-        [2, 3, 4, 5],
-        [1],
-        
-        
-        
+        ["ST"],
+        ["CAM", "CAM"],
+        ["LCM", "CM", "RCM"],
+        ["LB", "CB", "CB", "RB"],
+        ["GK"],
+    ],
+};
+
+// กำหนดพิกัดตำแหน่งของผู้เล่นในแต่ละแผน
+const playerPositions = {
+    "4-3-3": [
+        { top: "15%", left: "50%" }, // ST
+        { top: "25%", left: "30%" }, // LW
+        { top: "25%", left: "70%" }, // RW
+        { top: "45%", left: "30%" }, // LCM
+        { top: "45%", left: "50%" }, // CM
+        { top: "45%", left: "70%" }, // RCM
+        { top: "65%", left: "20%" }, // LB
+        { top: "65%", left: "40%" }, // CB
+        { top: "65%", left: "60%" }, // CB
+        { top: "65%", left: "80%" }, // RB
+        { top: "85%", left: "50%" }, // GK
+    ],
+    "4-4-2": [
+        { top: "20%", left: "40%" }, // ST
+        { top: "20%", left: "60%" }, // ST
+        { top: "40%", left: "20%" }, // LM
+        { top: "40%", left: "40%" }, // LCM
+        { top: "40%", left: "60%" }, // RCM
+        { top: "40%", left: "80%" }, // RM
+        { top: "60%", left: "20%" }, // LB
+        { top: "60%", left: "40%" }, // CB
+        { top: "60%", left: "60%" }, // CB
+        { top: "60%", left: "80%" }, // RB
+        { top: "85%", left: "50%" }, // GK
+    ],
+    "4-3-2-1": [
+        { top: "15%", left: "50%" }, // ST
+        { top: "30%", left: "40%" }, // CAM
+        { top: "30%", left: "60%" }, // CAM
+        { top: "50%", left: "30%" }, // LCM
+        { top: "50%", left: "50%" }, // CM
+        { top: "50%", left: "70%" }, // RCM
+        { top: "70%", left: "20%" }, // LB
+        { top: "70%", left: "40%" }, // CB
+        { top: "70%", left: "60%" }, // CB
+        { top: "70%", left: "80%" }, // RB
+        { top: "90%", left: "50%" }, // GK
     ],
 };
 
 function MyClub() {
     const [selectedFormation, setSelectedFormation] = useState("4-3-3");
+    const navigate = useNavigate();
 
     return (
         <div className="myclub-container">
             {/* Sidebar */}
             <div className="sidebar">
-                <Link to="/myclub" className="menu-item active">📋 MYCLUB</Link>
-                <Link to="/marketplace" className="menu-item">🛒 MARKET</Link>
-                <Link to="/compare" className="menu-item">🔗 COMPARE</Link>
+                <h2 className="title">MYCLUB_MAIN</h2>
+                <button className="menu-button active" onClick={() => navigate("/myclub")}>📋 MYCLUB</button>
+                <button className="menu-button" onClick={() => navigate("/marketplace")}>🛒 MARKET</button>
+                <button className="menu-button" onClick={() => navigate("/compare")}>🔗 COMPARE</button>
             </div>
 
             {/* Main Field Section */}
             <div className="main-content">
                 <div className="football-field">
-                    {formations[selectedFormation].map((row, rowIndex) => (
-                        <div key={rowIndex} className="player-row">
-                            {row.map((pos) => (
-                                <div key={pos} className="player-card">+</div>
-                            ))}
+                    {formations[selectedFormation].flat().map((position, index) => (
+                        <div 
+                            key={`${position}-${index}`} 
+                            className="player-card" 
+                            style={{
+                                top: playerPositions[selectedFormation][index].top,
+                                left: playerPositions[selectedFormation][index].left
+                            }}
+                            
+                        >
+                            <span className="player-position">{position}</span>
                         </div>
                     ))}
                 </div>
