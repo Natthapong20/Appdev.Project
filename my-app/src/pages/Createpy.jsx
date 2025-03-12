@@ -4,7 +4,7 @@ import "./Create.css";
 
 function Createpy() {
     const [players, setPlayers] = useState([]);
-    const [newPlayer, setNewPlayer] = useState({
+    const [newPlayer, setNewPlayer] = useState({_id: "",
         PlayerName: "", Age: "", Position: "", Height: "", Nationality: "", 
         Price: "", Goals: "", Assists: "", Appearances: "", Cleansheet: "", image_url: ""
     });
@@ -27,6 +27,7 @@ function Createpy() {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
+        const safeValue = value ?? ""
         if (editPlayer) {
             setEditPlayer({ ...editPlayer, [name]: value });
         } else {
@@ -35,7 +36,9 @@ function Createpy() {
     };
 
     const validateForm = (player) => {
-        return Object.values(player).every(value => value.trim() !== '');
+        return Object.values(player).every(value => 
+            typeof value === "string" ? value.trim() !== "" : value !== null && value !== undefined
+        );
     };
 
     const handleCreatePlayer = async () => {
@@ -48,7 +51,7 @@ function Createpy() {
         if (response.data) {
             setPlayers([...players, response.data]); // ✅ ตรวจสอบ response.data
         }
-        setNewPlayer({
+        setNewPlayer({_id: "",
             PlayerName: "", Age: "", Position: "", Height: "", Nationality: "", 
             Price: "", Goals: "", Assists: "", Appearances: "", Cleansheet: "", image_url: ""
         });
@@ -56,11 +59,12 @@ function Createpy() {
         console.error("Error creating player:", error.response?.data || error.message);
     }
 };
-//ยังไม่ทำ
+
+    
     const handleEditPlayer = (player) => {
         setEditPlayer(player);
     };
-
+//ยังไม่ทำ
     const handleUpdatePlayer = async () => {
         if (!validateForm(editPlayer)) return;
         try {
@@ -103,44 +107,45 @@ function Createpy() {
                     </tr>
                 </thead>
                 <tbody>
-                    {players.map((player) => (
-                        <tr key={player._id}>  
-                            <td>{player._id}</td>
-                            <td><img src={player.image_url} alt={player.PlayerName} width="50" /></td>
-                            <td>{player.PlayerName}</td>
-                            <td>{player.Age}</td>
-                            <td>{player.Position}</td>
-                            <td>{player.Height}</td>
-                            <td>{player.Nationality}</td>
-                            <td>{player.Price}</td>
-                            <td>{player.Goals}</td>
-                            <td>{player.Assists}</td>
-                            <td>{player.Appearances}</td>
-                            <td>{player.Cleansheet}</td>
-                            <td>
-                                <button onClick={() => handleEditPlayer(player)}>Edit</button>
-                                <button onClick={() => handleDeletePlayer(player._id)}>Delete</button>
-                            </td>
-                        </tr>
-                    ))}
+                {players.map((player, index) => (
+    <tr key={player._id}>  
+        <td>{player._id}</td> 
+        <td><img src={player.image_url} alt={player.PlayerName} width="50" /></td>
+        <td>{player.PlayerName}</td>
+        <td>{player.Age}</td>
+        <td>{player.Position}</td>
+        <td>{player.Height}</td>
+        <td>{player.Nationality}</td>
+        <td>{player.Price}</td>
+        <td>{player.Goals}</td>
+        <td>{player.Assists}</td>
+        <td>{player.Appearances}</td>
+        <td>{player.Cleansheet}</td>
+        <td>
+            <button onClick={() => handleEditPlayer(player)}>Edit</button>
+        </td>
+    </tr>
+))}
                 </tbody>
             </table>
 
             <h2>{editPlayer ? "Edit Player" : "Add New Player"}</h2>
             {Object.keys(newPlayer).map((key) => (
-                <div key={key}>
-                    <input
-                        type="text"
-                        name={key}
-                        placeholder={key}
-                        value={editPlayer ? editPlayer[key] : newPlayer[key]}
-                        onChange={handleInputChange}
-                    />
-                    {key === "image_url" && (editPlayer?.image_url || newPlayer.image_url) && (
-                        <img src={editPlayer ? editPlayer.image_url : newPlayer.image_url} alt="Preview" width="100" />
-                    )}
-                </div>
-            ))}
+     (
+        <div key={key}>
+            <input
+                type="text"
+                name={key}
+                placeholder={key}
+                value={editPlayer ? editPlayer[key] : newPlayer[key]}
+                onChange={handleInputChange}
+            />
+            {key === "image_url" && (editPlayer?.image_url || newPlayer.image_url) && (
+                <img src={editPlayer ? editPlayer.image_url : newPlayer.image_url} alt="Preview" width="100" />
+            )}
+        </div>
+    )
+))}
             <button onClick={editPlayer ? handleUpdatePlayer : handleCreatePlayer}>
                 {editPlayer ? "Update" : "Create"}
             </button>
