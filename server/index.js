@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 // เชื่อมต่อ MongoDB
-mongoose.connect("mongodb://127.0.0.1:27017/employee", {
+mongoose.connect("mongodb+srv://test:1234@appdev.atzq8.mongodb.net/?retryWrites=true&w=majority&appName=Appdev", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
