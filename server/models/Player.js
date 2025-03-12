@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const EmployeeSchema = new mongoose.Schema({
+    _id : Number,
     PlayerName: String,
     Age: Number,
     Position: String,
