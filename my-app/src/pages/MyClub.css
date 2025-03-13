@@ -1,4 +1,4 @@
-/* ปรับพื้นหลังของทั้งหน้าให้เข้ากับธีม */
+ปรับพื้นหลังของทั้งหน้าให้เข้ากับธีม
 .myclub-container {
     display: flex;
     width: 100vw;
@@ -13,7 +13,7 @@
     left: 0;
     top: 0;
     height: 100%;
-    width: 180px;
+    width: 200px;
     background-color: #110a1d;
     display: flex;
     flex-direction: column;
@@ -58,11 +58,11 @@
 
 /* พื้นหลังสนามฟุตบอล */
 .football-field {
-    width: 80%;
-    max-width: 600px;
-    height: 90vh;
+    width: 100%;
+    max-width: 800px;
+    height: 100vh;
     background: url('/public/players/football-field.png') no-repeat center center;
-    background-size: contain;
+    background-size: cover;
     display: flex;
     position: relative; 
     justify-content: center;
@@ -102,7 +102,7 @@
     right: 0;
     top: 0;
     height: 100%;
-    width: 180px;
+    width: 200px;
     background-color: #110a1d;
     display: flex;
     flex-direction: column;
