@@ -22,22 +22,49 @@ const MyClub = () => {
 
   // 🔹 พิกัดตำแหน่งของผู้เล่นในสนาม
   const playerPositions = {
-    "4-3-3": [{ top: "15%", left: "50%" }, { top: "25%", left: "30%" }, { top: "25%", left: "70%" },
-               { top: "45%", left: "30%" }, { top: "45%", left: "50%" }, { top: "45%", left: "70%" },
-               { top: "65%", left: "20%" }, { top: "65%", left: "40%" }, { top: "65%", left: "60%" },
-               { top: "65%", left: "80%" }, { top: "85%", left: "50%" }],
+    "4-3-3": [
+        { top: "22%", left: "20%" },  // LW
+        { top: "12%", left: "50.5%" },  // ST
+        { top: "22%", left: "80.5%" },  // RW
+        { top: "43%", left: "30%" },  // LCM
+        { top: "45%", left: "50.5%" },  // CM
+        { top: "43%", left: "70.5%" },  // RCM
+        { top: "66%", left: "20%" },  // LB
+        { top: "68%", left: "40%" },  // CB
+        { top: "68%", left: "60.5%" },  // CB
+        { top: "66%", left: "80.5%" },  // RB
+        { top: "89%", left: "50.5%" }   // GK
+    ],
 
-    "4-4-2": [{ top: "20%", left: "40%" }, { top: "20%", left: "60%" },
-               { top: "40%", left: "20%" }, { top: "40%", left: "40%" }, { top: "40%", left: "60%" }, { top: "40%", left: "80%" },
-               { top: "60%", left: "20%" }, { top: "60%", left: "40%" }, { top: "60%", left: "60%" }, { top: "60%", left: "80%" },
-               { top: "85%", left: "50%" }],
+    "4-4-2": [
+        { top: "15%", left: "40.5%" },  // ST
+        { top: "15%", left: "60.5%" },  // ST
+        { top: "36%", left: "20%" },  // LM
+        { top: "42%", left: "40.5%" },  // CM
+        { top: "42%", left: "60.5%" },  // CM
+        { top: "36%", left: "80%" },  // RM
+        { top: "65%", left: "20%" },  // LB
+        { top: "68%", left: "40.5%" },  // CB
+        { top: "68%", left: "60.5%" },  // CB
+        { top: "65%", left: "80.5%" },  // RB
+        { top: "89%", left: "50.5%" }   // GK
+    ],
 
-    "4-3-2-1": [{ top: "15%", left: "50%" },
-               { top: "30%", left: "40%" }, { top: "30%", left: "60%" },
-               { top: "50%", left: "30%" }, { top: "50%", left: "50%" }, { top: "50%", left: "70%" },
-               { top: "70%", left: "20%" }, { top: "70%", left: "40%" }, { top: "70%", left: "60%" }, { top: "70%", left: "80%" },
-               { top: "90%", left: "50%" }],
-  };
+    "4-3-2-1": [
+        { top: "11%", left: "50.5%" },  // ST 
+        { top: "29%", left: "38.5%" },  // CAM 
+        { top: "29%", left: "62%" },  // CAM 
+        { top: "48%", left: "28%" },  // LCM
+        { top: "50%", left: "50.5%" },  // CM 
+        { top: "48%", left: "73%" },  // RCM
+        { top: "67%", left: "18%" },  // LB
+        { top: "70%", left: "40%" },  // CB
+        { top: "70%", left: "60.5%" },  // CB
+        { top: "67%", left: "83.5%" },  // RB
+        { top: "89%", left: "50.5%" }   // GK
+    ]
+};
+
 
   // 🔹 ฟังก์ชันเปลี่ยนชื่อนักเตะ
   const handlePlayerChange = async (index, position) => {
@@ -78,7 +105,7 @@ const MyClub = () => {
 
       {/* สนามฟุตบอล */}
       <div className="flex flex-1 justify-center items-center">
-        <div className="relative w-[800px] h-[900px] bg-cover bg-center rounded-lg shadow-lg" style={{ backgroundImage: `url(${footballField})` }}>
+        <div className="relative w-[700px] h-[925px] bg-cover bg-center rounded-lg shadow-lg" style={{ backgroundImage: `url(${footballField})` }}>
           {playerPositions[selectedFormation]?.map((pos, index) => {
             const positionLabel = formations[selectedFormation].flat()[index] || "??";
             const player = players[index];
@@ -86,7 +113,7 @@ const MyClub = () => {
             return (
               <div 
                 key={index} 
-                className="absolute w-20 h-28 bg-cover bg-center flex items-center justify-center font-bold cursor-pointer rounded-lg shadow-lg"
+                className="absolute w-32 h-48 bg-cover bg-center flex items-center justify-center font-bold cursor-pointer rounded-lg shadow-lg"
                 style={{ backgroundImage: `url(${playerCard})`, top: pos.top, left: pos.left, transform: "translate(-50%, -50%)" }}
                 onClick={() => handlePlayerChange(index, positionLabel)}
               >
