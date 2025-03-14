@@ -2,12 +2,15 @@ import { useState } from "react";
 import "./UIMar.css";
 import axios from "axios";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Market = () => {
   const [players, setPlayers] = useState([]);
   const [selectedPosition, setSelectedPosition] = useState("");
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPlayers();
@@ -36,6 +39,14 @@ const Market = () => {
         <h1 className="text-2xl font-bold">🛒 World Market</h1>
         <p>เลือกซื้อนักเตะที่คุณสนใจที่นี่!</p>
       </div>
+
+      {/* ปุ่ม Back */}
+      <button
+        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+        onClick={() => navigate(-1)} 
+      >
+        🔙 Back
+      </button>
 
       {/* Search Bar */}
       <input

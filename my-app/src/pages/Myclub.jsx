@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-// ✅ นำเข้ารูปจาก `src/assets/players/`
+//  นำเข้ารูปจาก `src/assets/players/`
 import footballField from "../assets/players/football-field.png";
 import playerCard from "../assets/players/card.png";
 
@@ -102,7 +102,7 @@ const MyClub = () => {
           🔗 COMPARE
         </button>
       </div>
-
+ฟ
       {/* สนามฟุตบอล */}
       <div className="flex flex-1 justify-center items-center">
         <div className="relative w-[700px] h-[925px] bg-cover bg-center rounded-lg shadow-lg" style={{ backgroundImage: `url(${footballField})` }}>
@@ -151,3 +151,5 @@ const MyClub = () => {
 };
 
 export default MyClub;
+
+
