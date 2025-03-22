@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const EmployeeModel = require("./models/Employee");
 const playerl = require("./models/Player");
+const teamRoutes = require('./routes/teamRoutes'); // ✅ เพิ่ม
 
 const app = express();
 app.use(express.json());
@@ -16,16 +17,18 @@ mongoose.connect("mongodb+srv://test:1234@appdev.atzq8.mongodb.net/?retryWrites=
 .then(() => console.log("✅ MongoDB Connected"))
 .catch(err => console.log("❌ MongoDB Connection Error:", err));
 
-// สร้างการล็อคอิน
+app.use('/team', teamRoutes); // ✅ เพิ่มตรงนี้
+
+// ✅ สร้างการล็อคอิน พร้อมส่ง userId กลับไป frontend
 app.post("/login", (req, res) => {
     const { email, password } = req.body;
     EmployeeModel.findOne({ email: email })
     .then(user => {
         if(user) {
             if(user.password === password) {
-                res.json("Success");
+                res.json({ message: "Success", userId: user._id }); // ✅ ส่ง userId กลับ
             } else {
-                res.json("The password is incorrect");
+                res.json("the password is incorrect");
             }
         } else {
             res.json("No record existed");
@@ -33,7 +36,7 @@ app.post("/login", (req, res) => {
     });
 });
 
-// ตรงนนี้ล็อคอินค้าบ
+// ตรงนี้ register ค้าบ
 app.post('/register', async (req, res) => {
     try {
         const newEmployee = await EmployeeModel.create(req.body);
@@ -55,7 +58,7 @@ app.post("/create", async (req, res) => {
     }
 });
 
-// REad 
+// Read 
 app.get("/create", async (req, res) => {
     try {
         const players = await playerl.find();
@@ -65,7 +68,7 @@ app.get("/create", async (req, res) => {
     }
 });
 
-// เรียกการ update
+// update
 app.put("/create/:id", async (req, res) => {
     try {
         const updatedPlayer = await playerl.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -78,7 +81,7 @@ app.put("/create/:id", async (req, res) => {
     }
 });
 
-// เรียกให้มีการ delete 
+// delete
 app.delete("/create/:id", async (req, res) => {
     try {
         const deletedPlayer = await playerl.findByIdAndDelete(req.params.id);
@@ -90,7 +93,6 @@ app.delete("/create/:id", async (req, res) => {
         res.status(500).json({ error: "Error deleting player" });
     }
 });
-
 
 app.listen(3001, () => {
     console.log("🚀 Server is running on port 3001");

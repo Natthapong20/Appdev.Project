@@ -10,24 +10,28 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3001/login", 
-            {
+            const response = await axios.post("http://localhost:3001/login", {
                 email,
                 password
             });
-            console.log(response.data); //ถ้าข้อมูลตรงกับในดาต้าเบสจะได้ตรงนี้
-            if (response.data === "Success") {
-                alert("กำลังเข้าสู่ระบบ")
-                navigate("/Myclub"); 
-            }
-            else if(response.data === "the password is incorrect"){
-                alert("รหัสผิดพลาดนะจะ")
-            }
-            else if(response.data === "No record existed"){
-                alert("กรุณาสมัคใช้บริการก่อน")
+
+            console.log("📥 Login Response:", response.data);
+
+            // ✅ เพิ่มการตรวจสอบ message และเก็บ userId
+            if (response.data.message === "Success") {
+                localStorage.setItem("userId", response.data.userId); // ✅ เก็บ userId จริง
+                alert("✅ เข้าสู่ระบบสำเร็จ!");
+                navigate("/Myclub"); // ✅ เข้าหน้า Myclub หรือเปลี่ยนได้
+            } 
+            else if (response.data === "the password is incorrect") {
+                alert("รหัสผิดพลาดนะจะ");
+            } 
+            else if (response.data === "No record existed") {
+                alert("กรุณาสมัคใช้บริการก่อน");
             }
         } catch (error) {
             console.error("Login error:", error);
+            alert("❌ เกิดข้อผิดพลาดในการเข้าสู่ระบบ");
         } 
     };
 
