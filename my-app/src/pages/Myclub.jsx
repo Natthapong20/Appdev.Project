@@ -4,6 +4,27 @@ import axios from "axios";
 import footballField from "../assets/players/football-field.png";
 import playerCard from "../assets/players/card.png";
 
+// 👉 Component สำหรับ modal เลือกนักเตะ
+const PlayerSelectModal = ({ players, onSelect, onClose }) => {
+  return (
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white p-6 rounded-lg text-black max-w-3xl w-full">
+        <h2 className="text-xl font-bold mb-4">เลือกนักเตะเข้าทีม</h2>
+        <div className="grid grid-cols-3 gap-4 max-h-[400px] overflow-y-auto">
+          {players.map((player, idx) => (
+            <div key={idx} className="cursor-pointer text-center" onClick={() => onSelect(player)}>
+              <img src={player.image_url} alt={player.PlayerName} className="w-32 h-auto mx-auto" />
+              <p className="mt-1">{player.PlayerName}</p>
+            </div>
+          ))}
+        </div>
+        <button className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg" onClick={onClose}>ปิด</button>
+      </div>
+    </div>
+  );
+};
+
+
 const MyClub = () => {
   const navigate = useNavigate();
   const [selectedFormation, setSelectedFormation] = useState("4-3-3");
@@ -11,7 +32,7 @@ const MyClub = () => {
   const [teamPlayers, setTeamPlayers] = useState([]);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
 
-  const userId = "67dd47961931771b6d6b1345";
+  const userId = "67dd47961931771b6d6b1345"; // TODO: เปลี่ยนเป็น dynamic จาก login จริง
 
   const formations = {
     "4-3-3": [["LW", "ST", "RW"], ["LCM", "CM", "RCM"], ["LB", "CB", "CB", "RB"], ["GK"]],
@@ -47,7 +68,6 @@ const MyClub = () => {
   const fetchTeamData = async () => {
     try {
       const response = await axios.get(`http://localhost:3001/team/${userId}`);
-      console.log("📥 Team Data:", response.data);
       setTeamPlayers(response.data.ownedPlayers || []);
       setPlayers(response.data.lineupPlayers || Array(11).fill(null));
       setSelectedFormation(response.data.formation || "4-3-3");
@@ -87,14 +107,16 @@ const MyClub = () => {
   };
 
   return (
-    <div className="flex w-screen h-screen bg-gray-900 text-white">
-      <div className="fixed left-0 top-0 h-full w-48 bg-purple-900 flex flex-col items-center p-4 shadow-lg">
-        <h2 className="text-xl font-bold">MYCLUB_MAIN</h2>
-        <button className="w-36 py-2 mt-4 bg-yellow-500 text-black font-bold rounded" onClick={() => navigate("/myclub")}>📋 MYCLUB</button>
-        <button className="w-36 py-2 mt-2 bg-gray-700 hover:bg-gray-600 rounded" onClick={() => navigate("/marketplace")}>🛒 MARKET</button>
-        <button className="w-36 py-2 mt-2 bg-gray-700 hover:bg-gray-600 rounded" onClick={() => navigate("/compare")}>🔗 COMPARE</button>
+    <div className="flex w-screen h-screen bg-[#1a1452] text-white">
+      {/* Sidebar ซ้าย */}
+      <div className="fixed left-0 top-0 h-full w-48 bg-[#140B20] flex flex-col items-center p-4 shadow-lg">
+        <h2 className="text-xl font-bold text-white mb-4">MYCLUB</h2>
+        <button className="w-36 py-2 mt-2 bg-yellow-400 text-black font-bold rounded" onClick={() => navigate("/myclub")}>📋 MYCLUB</button>
+        <button className="w-36 py-2 mt-2 bg-gray-800 hover:bg-gray-700 text-white rounded" onClick={() => navigate("/marketplace")}>🛒 MARKET</button>
+        <button className="w-36 py-2 mt-2 bg-gray-800 hover:bg-gray-700 text-white rounded" onClick={() => navigate("/compare")}>🔗 COMPARE</button>
       </div>
 
+      {/* สนามฟุตบอล */}
       <div className="flex flex-1 justify-center items-center">
         <div className="relative w-[700px] h-[925px] bg-cover bg-center rounded-lg shadow-lg" style={{ backgroundImage: `url(${footballField})` }}>
           {playerPositions[selectedFormation]?.map((pos, index) => {
@@ -128,16 +150,17 @@ const MyClub = () => {
         </div>
       </div>
 
-      <div className="fixed right-0 top-0 h-full w-48 bg-purple-900 flex flex-col items-center p-4 shadow-lg">
+      {/* Sidebar ขวา */}
+      <div className="fixed right-0 top-0 h-full w-48 bg-[#140B20] flex flex-col items-center p-4 shadow-lg">
         <div className="w-16 h-16 bg-gray-500 rounded-full flex items-center justify-center text-2xl">👤</div>
         <p className="mt-2">Username</p>
 
         <div className="mt-4 p-4 bg-gray-800 rounded-lg text-center">
-          <h3 className="text-lg font-bold">PLAN</h3>
+          <h3 className="text-lg font-bold text-white">PLAN</h3>
           {Object.keys(formations).map((formation) => (
             <button
               key={formation}
-              className={`w-28 py-2 mt-2 rounded text-black font-bold ${selectedFormation === formation ? "bg-yellow-500" : "bg-gray-400 hover:bg-yellow-400"}`}
+              className={`w-28 py-2 mt-2 rounded text-black font-bold ${selectedFormation === formation ? "bg-yellow-400" : "bg-gray-400 hover:bg-yellow-400"}`}
               onClick={() => setSelectedFormation(formation)}
             >
               {formation}
@@ -148,21 +171,13 @@ const MyClub = () => {
         <button className="w-28 mt-4 py-2 bg-green-500 hover:bg-green-600 text-black font-bold rounded" onClick={saveLineup}>💾 SAVE</button>
       </div>
 
+      {/* Modal เลือกนักเตะ */}
       {selectedCardIndex !== null && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg text-black">
-            <h2 className="text-xl font-bold mb-4">เลือกนักเตะเข้าทีม</h2>
-            <div className="grid grid-cols-3 gap-4 max-h-[400px] overflow-y-auto">
-              {teamPlayers.map((player, idx) => (
-                <div key={idx} className="cursor-pointer text-center" onClick={() => selectPlayerFromTeam(player)}>
-                  <img src={player.image_url} alt={player.PlayerName} className="w-24 h-auto mx-auto" />
-                  <p>{player.PlayerName}</p>
-                </div>
-              ))}
-            </div>
-            <button className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg" onClick={() => setSelectedCardIndex(null)}>ปิด</button>
-          </div>
-        </div>
+        <PlayerSelectModal
+          players={teamPlayers}
+          onSelect={selectPlayerFromTeam}
+          onClose={() => setSelectedCardIndex(null)}
+        />
       )}
     </div>
   );

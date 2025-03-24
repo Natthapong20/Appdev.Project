@@ -6,6 +6,7 @@ import Welcome from "./pages/Welcome";
 import MyClub from "./pages/Myclub";
 import Createpy from "./pages/Createpy";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Compare from "./pages/Compare";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path='/' element={<Welcome />} />
             <Route path='/Myclub' element={< MyClub/>} />
             <Route path='/Create' element={< Createpy/>} />
+            <Route path="/compare" element={<Compare />} />
           </Routes>
     </Router>
   );
