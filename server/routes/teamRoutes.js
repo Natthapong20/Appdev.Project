@@ -4,10 +4,11 @@ const Team = require("../models/Team");
 const Player = require("../models/Player");
 
 // ✅ ซื้อผู้เล่นแล้วเพิ่มเข้า team
+//เป็นการกำหนดเส้นทาง API สำหรับการซื้อผู้เล่น
 router.post("/buy/:userId/:playerId", async (req, res) => {
   const { userId, playerId } = req.params;
   console.log("\n📥 [Buy] userId:", userId, "playerId:", playerId);
-
+// 
   try {
     const player = await Player.findById(playerId);
     if (!player) return res.status(404).json({ message: "Player not found" });
