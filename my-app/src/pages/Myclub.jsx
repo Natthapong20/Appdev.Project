@@ -31,9 +31,11 @@ const MyClub = () => {
   const [players, setPlayers] = useState(Array(11).fill(null));
   const [teamPlayers, setTeamPlayers] = useState([]);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
-
-  const userId = "67dd47961931771b6d6b1345"; // TODO: เปลี่ยนเป็น dynamic จาก login จริง
-
+  const [username, setUsername] = useState(""); // สถานะสำหรับเก็บชื่อผู้ใช้
+  
+  // ดึง userId จาก Local Storage
+  const userId = localStorage.getItem("userId");
+  const storedName = localStorage.getItem("name");
   const formations = {
     "4-3-3": [["LW", "ST", "RW"], ["LCM", "CM", "RCM"], ["LB", "CB", "CB", "RB"], ["GK"]],
     "4-4-2": [["ST", "ST"], ["LM", "CM", "CM", "RM"], ["LB", "CB", "CB", "RB"], ["GK"]],
@@ -62,9 +64,16 @@ const MyClub = () => {
   };
 
   useEffect(() => {
+    if (!userId) {
+      alert("กรุณาเข้าสู่ระบบก่อน!");
+      navigate("/login"); // หากไม่มี userId ให้เปลี่ยนไปหน้า Login
+      return;
+    }
     fetchTeamData();
-  }, []);
+    fetchUsername();
+  }, [userId, navigate]);
 
+  //ดึงข้อมูลนักเตะจาก API
   const fetchTeamData = async () => {
     try {
       const response = await axios.get(`http://localhost:3001/team/${userId}`);
@@ -73,6 +82,18 @@ const MyClub = () => {
       setSelectedFormation(response.data.formation || "4-3-3");
     } catch (error) {
       console.error("Error fetching team data:", error);
+    }
+  };
+
+  // เรียก API เพื่อดึงชื่อผู้ใช้
+  const fetchUsername = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3001/employees/${userId}`);
+      localStorage.setItem("name", response.data.name); // เก็บชื่อผู้ใช้ใน Local Storage
+      setUsername(response.data.name); // ตั้งค่าชื่อผู้ใช้ในสถานะ
+    } catch (error) {
+      console.error("Error fetching username:", error);
+      setUsername("User"); // กำหนดค่าเริ่มต้นหากเกิดข้อผิดพลาด
     }
   };
 
@@ -153,7 +174,8 @@ const MyClub = () => {
       {/* Sidebar ขวา */}
       <div className="fixed right-0 top-0 h-full w-48 bg-[#140B20] flex flex-col items-center p-4 shadow-lg">
         <div className="w-16 h-16 bg-gray-500 rounded-full flex items-center justify-center text-2xl">👤</div>
-        <p className="mt-2">Username</p>
+        <p className="mt-2">{username}</p> {/* แสดงชื่อผู้ใช้ */}
+
 
         <div className="mt-4 p-4 bg-gray-800 rounded-lg text-center">
           <h3 className="text-lg font-bold text-white">PLAN</h3>
