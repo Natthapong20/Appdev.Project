@@ -34,8 +34,7 @@ const MyClub = () => {
   const [username, setUsername] = useState(""); // สถานะสำหรับเก็บชื่อผู้ใช้
   
   // ดึง userId จาก Local Storage
-  const userId = localStorage.getItem("userId");
-  const storedName = localStorage.getItem("name");
+  const userId = localStorage.getItem("userid");
   const formations = {
     "4-3-3": [["LW", "ST", "RW"], ["LCM", "CM", "RCM"], ["LB", "CB", "CB", "RB"], ["GK"]],
     "4-4-2": [["ST", "ST"], ["LM", "CM", "CM", "RM"], ["LB", "CB", "CB", "RB"], ["GK"]],
@@ -64,11 +63,6 @@ const MyClub = () => {
   };
 
   useEffect(() => {
-    if (!userId) {
-      alert("กรุณาเข้าสู่ระบบก่อน!");
-      navigate("/login"); // หากไม่มี userId ให้เปลี่ยนไปหน้า Login
-      return;
-    }
     fetchTeamData();
     fetchUsername();
   }, [userId, navigate]);
@@ -135,6 +129,8 @@ const MyClub = () => {
         <button className="w-36 py-2 mt-2 bg-yellow-400 text-black font-bold rounded" onClick={() => navigate("/myclub")}>📋 MYCLUB</button>
         <button className="w-36 py-2 mt-2 bg-gray-800 hover:bg-gray-700 text-white rounded" onClick={() => navigate("/marketplace")}>🛒 MARKET</button>
         <button className="w-36 py-2 mt-2 bg-gray-800 hover:bg-gray-700 text-white rounded" onClick={() => navigate("/compare")}>🔗 COMPARE</button>
+        <button className="w-36 py-2 mt-2 bg-red-600 hover:bg-red-500 text-white rounded absolute bottom-5 left-1/2 transform -translate-x-1/2" onClick={() => navigate("/login")}>LOGOUT</button>
+      {/* bg=สีปุ่ม hover-bg=สีปุ่มตอนวางเมาส์ที่ปุ่ม text=สีตัวอักษร rounded=ขอบมน absolute=ตำแหน่งขอบอขงคอนเทนเนอร์ bottom=อยู่ชิดด้านล่างขนาดไหน left-1/2=ห่างจากซ้าย50% transform -translate=ขยับไปทางซ้ายตามความยาวตัวเอง*/}
       </div>
 
       {/* สนามฟุตบอล */}
@@ -174,7 +170,6 @@ const MyClub = () => {
       {/* Sidebar ขวา */}
       <div className="fixed right-0 top-0 h-full w-48 bg-[#140B20] flex flex-col items-center p-4 shadow-lg">
         <div className="w-16 h-16 bg-gray-500 rounded-full flex items-center justify-center text-2xl">👤</div>
-        <p className="mt-2">{username}</p> {/* แสดงชื่อผู้ใช้ */}
 
 
         <div className="mt-4 p-4 bg-gray-800 rounded-lg text-center">
