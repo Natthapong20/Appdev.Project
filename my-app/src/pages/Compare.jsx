@@ -24,14 +24,14 @@ function CompareCard({ player }) {
       <h2 className="text-xl font-bold truncate">{player.PlayerName}</h2>
       <p className="text-sm mb-1">{player.Position}</p>
       <div className="text-xs mb-2 text-left pl-4">
-        <p><span className="font-semibold">Age:</span> {player.Age}</p>
-        <p><span className="font-semibold">Height:</span> {player.Height} cm</p>
-        <p><span className="font-semibold">Nationality:</span> {player.Nationality}</p>
-        <p><span className="font-semibold">Price:</span> {player.Price}</p>
-        <p><span className="font-semibold">Appearances:</span> {player.Appearances}</p>
-        <p><span className="font-semibold">Goals:</span> {player.Goals}</p>
-        <p><span className="font-semibold">Assists:</span> {player.Assists}</p>
-        <p><span className="font-semibold">Clean Sheets:</span> {player.Cleansheet}</p>
+        <p><span className="font-semibold">อายุ:</span> {player.Age} ปี</p>
+        <p><span className="font-semibold">ส่วนสูง:</span> {player.Height} ซม.</p>
+        <p><span className="font-semibold">สัญชาติ:</span> {player.Nationality}</p>
+        <p><span className="font-semibold">💰ค่าตัว:</span> {player.Price}</p>
+        <p><span className="font-semibold">🎮ลงเล่น:</span> {player.Appearances} นัด</p>
+        <p><span className="font-semibold">⚽ยิงประตู</span> {player.Goals}</p>
+        <p><span className="font-semibold">🎯แอสซิสต์:</span> {player.Assists}</p>
+        <p><span className="font-semibold">🧤คลีนชีท:</span> {player.Cleansheet}</p>
       </div>
     </div>
   );
