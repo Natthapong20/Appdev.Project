@@ -3,6 +3,7 @@ import "./UIMar.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+
 const Market = () => {
   const [players, setPlayers] = useState([]);
   const [selectedPosition, setSelectedPosition] = useState("");
@@ -10,12 +11,14 @@ const Market = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
-  const userId = "67dd47961931771b6d6b1345"; // mock userId
 
+  // ดึง userId จาก Local Storage
+  const userId = localStorage.getItem("userId");
+  const username = localStorage.getItem("name");
   useEffect(() => {
     fetchPlayers();
   }, []);
-
+// ดึงข้อมูลจาก  api
   const fetchPlayers = async () => {
     try {
       const response = await axios.get("http://localhost:3001/create");
@@ -37,7 +40,7 @@ const Market = () => {
     try {
       await axios.post(`http://localhost:3001/team/buy/${userId}/${selectedPlayer._id}`);
       alert("✅ ซื้อสำเร็จ!");
-      setPlayers(prev => prev.filter(p => p._id !== selectedPlayer._id));
+      // ลบเมื่อซื้อสำเร็จ  setPlayers(prev => prev.filter(p => p._id !== selectedPlayer._id));
       setSelectedPlayer(null);
     } catch (error) {
       const errorMessage = error.response?.data?.message || "ซื้อไม่สำเร็จ!";
@@ -63,6 +66,7 @@ const Market = () => {
         </div>
 
         <input
+        // serch bar input
           type="text"
           placeholder="ค้นหาชื่อนักเตะ..."
           className="mt-4 p-2 border rounded w-1/2 text-black"
@@ -96,9 +100,11 @@ const Market = () => {
         <div className="mt-6 px-6 flex justify-center gap-6 flex-wrap">
           {players
             .filter((player) =>
+              //เป็นการค้นหาชื่อนักเตะ
               (!selectedPosition || player.Position === selectedPosition) &&
               (player.PlayerName.toLowerCase().includes(searchTerm.toLowerCase()))
             )
+            // ดึงรูปนักเตะมาแสดง
             .map((player) => (
               <img
                 key={player._id}
@@ -113,29 +119,35 @@ const Market = () => {
 
         {selectedPlayer && (
           <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-lg text-black" style={{ width: "1200px" }}>
-              <div className="w-full text-center mb-4">
-                <p><b>สโมสร:</b> {selectedPlayer.Nationality}</p>
-              </div>
+            <div className="bg-white p-6 rounded-lg text-black " style={{ width: "500px" }}>
               <h2 className="text-xl font-bold mb-4">{selectedPlayer.PlayerName}</h2>
-              <img src={selectedPlayer.image_url} alt={selectedPlayer.PlayerName} className="w-40 mx-left rounded-lg mb-4" />
-              <p><b>ตำแหน่ง:</b> {selectedPlayer.Position}</p>
-              <p><b>อายุ:</b> {selectedPlayer.Age} ปี</p>
-              <p>⚽ <b>ยิงประตู:</b> {selectedPlayer.Goals} | 🎯 <b>แอสซิสต์:</b> {selectedPlayer.Assists}</p>
-              <p>🧤 <b>คลีนชีท:</b> {selectedPlayer.Cleansheet} | 🎮 <b>ลงเล่น:</b> {selectedPlayer.Appearances} นัด</p>
+              <img src={selectedPlayer.image_url} alt={selectedPlayer.PlayerName} className="w-40 mx-auto mb-4" />
+              
+              <div className="mt-4">
+                <p><b>ตำแหน่ง:</b> {selectedPlayer.Position} | <b>สัญชาติ:</b> {selectedPlayer.Nationality}</p>
+                <p><b>อายุ:</b> {selectedPlayer.Age} ปี | <b>ส่วนสูง:</b> {selectedPlayer.Height || "ไม่ระบุ"} ซม.</p>
+              </div>
 
-              <button 
-                className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg mr-2" 
-                onClick={handleBuy}
-              >
-                ✅ ซื้อ
-              </button>
-              <button 
-                className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg" 
-                onClick={() => setSelectedPlayer(null)}
-              >
-                ปิด
-              </button>
+              <div className="mt-4">
+                <p>⚽ <b>ยิงประตู:</b> {selectedPlayer.Goals} | 🎯 <b>แอสซิสต์:</b> {selectedPlayer.Assists}</p>
+                <p>🧤 <b>คลีนชีท:</b> {selectedPlayer.Cleansheet} | 🎮 <b>ลงเล่น:</b> {selectedPlayer.Appearances} นัด</p>
+                <p>💰 <b>ค่าตัว:</b> {selectedPlayer.Price ? selectedPlayer.Price.toLocaleString() : "ไม่ระบุ"} </p>
+              </div>
+
+              <div className="mt-4">
+                <button 
+                  className="px-4 py-2 bg-green-500 text-white rounded-lg mr-2" 
+                  onClick={handleBuy}
+                >
+                  ✅ ซื้อ
+                </button>
+                <button 
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg" 
+                  onClick={() => setSelectedPlayer(null)}
+                >
+                  ปิด
+                </button>
+              </div>
             </div>
           </div>
         )}
