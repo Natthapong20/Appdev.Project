@@ -14,7 +14,6 @@ const Market = () => {
 
   // ดึง userId จาก Local Storage
   const userId = localStorage.getItem("userId");
-  const username = localStorage.getItem("name");
   useEffect(() => {
     fetchPlayers();
   }, []);
