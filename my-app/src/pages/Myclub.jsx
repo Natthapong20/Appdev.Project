@@ -116,6 +116,7 @@ const MyClub = () => {
         <button className="w-36 py-2 mt-2 bg-yellow-400 text-black font-bold rounded" onClick={() => navigate("/myclub")}>📋 MYCLUB</button>
         <button className="w-36 py-2 mt-2 bg-gray-800 hover:bg-gray-700 text-white rounded" onClick={() => navigate("/marketplace")}>🛒 MARKET</button>
         <button className="w-36 py-2 mt-2 bg-gray-800 hover:bg-gray-700 text-white rounded" onClick={() => navigate("/compare")}>🔗 COMPARE</button>
+        <button className="w-36 py-2 mt-2 bg-red-600 hover:bg-red-500 text-white rounded absolute bottom-5 left-1/2 transform -translate-x-1/2" onClick={() => navigate("/login")}>LOGOUT</button>
       </div>
 
       {/* สนามฟุตบอล */}
